@@ -48,3 +48,26 @@ Se funcionar, a saída será:
 ```bash
 "Hello Redis!"
 ```
+
+## Testando a Conexão com uma imagem curlimages/curl
+
+Execute o comando para criar o pod de depuração:
+```bash
+kubectl apply -f debug-pod.yaml
+```
+
+Agora, entre no pod para testar a conexão com o Redis e outros serviços:
+```bash
+kubectl exec -it debug-pod -n redis -- sh
+```
+
+Agora, dentro do pod, você pode rodar os seguintes testes:
+```bash
+nslookup redis-cluster
+```
+
+```bash
+ping -c 4 redis-cluster
+```
+
+* O hostname `redis-cluster` refere-se ao nome do serviço que endereça as requisições para o cluster. Esse nome que deve ser chamado na aplicação para resolver a conexão.

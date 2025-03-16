@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug-pod
+  namespace: redis-cluster
+spec:
+  containers:
+    - name: debug-container
+      image: curlimages/curl:latest  # Possui curl, ping e outras ferramentas
+      command: ["sleep", "3600"]  # Mantém o pod rodando
+      stdin: true
+      tty: true
