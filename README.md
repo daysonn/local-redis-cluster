@@ -1,6 +1,13 @@
 # local-redis-cluster
-Repositório para teste de implantação de cluster redis 
+Repositório para teste de implantação de cluster redis. Este documento cobre os passos necessários para rodar um Redis Cluster no Kubernetes com kind.
 
+## Visão Geral dos Recursos YAML
+Para criar um Redis Cluster sem usar Helm, você precisará definir os seguintes recursos:
+
+1. ConfigMap – Para configurar o Redis Cluster.
+2. Service (Headless) – Para permitir a descoberta dos pods do Redis.
+3. StatefulSet – Para garantir que os pods mantenham a identidade e se comuniquem corretamente.
+4. Pod com Cliente Redis – Para testar a conexão.
 
 ## Aplicando os recursos
 
