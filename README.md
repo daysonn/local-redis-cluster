@@ -21,8 +21,8 @@ kubectl apply -f redis-statefulset.yaml
 
 Para verificar se tudo está rodando corretamente:
 ```bash
-kubectl get pods -n redis
-kubectl get svc -n redis
+kubectl get pods -n redis-cluster
+kubectl get svc -n redis-cluster
 ```
 
 ## Criando o Cluster Redis
@@ -42,7 +42,7 @@ kubectl apply -f redis-client.yaml
 
 Entre no pod cliente:
 ```bash
-kubectl exec -it redis-client -n redis -- redis-cli -c -h redis-cluster-0.redis-cluster
+kubectl exec -it redis-client -n redis-cluster -- redis-cli -c -h redis-cluster-0.redis-cluster
 ```
 
 Testando a inserção de dados:
@@ -65,7 +65,7 @@ kubectl apply -f debug-pod.yaml
 
 Agora, entre no pod para testar a conexão com o Redis e outros serviços:
 ```bash
-kubectl exec -it debug-pod -n redis -- sh
+kubectl exec -it debug-pod -n redis-cluster -- sh
 ```
 
 Agora, dentro do pod, você pode rodar os seguintes testes:
