@@ -70,4 +70,4 @@ nslookup redis-cluster
 ping -c 4 redis-cluster
 ```
 
-* O hostname `redis-cluster` refere-se ao nome do serviço que endereça as requisições para o cluster. Esse nome que deve ser chamado na aplicação para resolver a conexão.
+* O hostname `redis-cluster` refere-se ao nome do serviço que endereça as requisições para o cluster. Esse nome que deve ser chamado de dentro do pod da aplicação e, então, o k8s resolve a conexão.
