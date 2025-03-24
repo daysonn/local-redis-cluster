@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: redis-cluster
-  namespace: redis-cluster
+  namespace: redis-namespace
 spec:
   serviceName: "redis-cluster"
   replicas: 6
@@ -17,7 +17,7 @@ spec:
       containers:
         - name: redis
           image: redis:7.0
-          command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--appendonly", "yes"]
+          command: ["/bin/bash", "/usr/local/etc/redis/init-redis-cluster.sh"]
           ports:
             - containerPort: 6379
           volumeMounts:
