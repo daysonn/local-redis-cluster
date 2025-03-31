@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: redis-config
-  namespace: redis-cluster
+  namespace: redis-namespace
 data:
   redis.conf: |
     port 6379
@@ -10,5 +10,3 @@ data:
     cluster-config-file nodes.conf
     cluster-node-timeout 5000
     appendonly no
-    requirepass auth_senha
-    masterauth auth_senha

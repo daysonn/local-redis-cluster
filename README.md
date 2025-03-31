@@ -28,7 +28,7 @@ kubectl get svc -n redis-namespace
 ## Criando o Cluster Redis
 
 ```bash
-kubectl exec -it redis-cluster-0 -n redis-namespace -- redis-cli --cluster create     redis-cluster-0.redis-cluster:6379     redis-cluster-1.redis-cluster:6379     redis-cluster-2.redis-cluster:6379     redis-cluster-3.redis-cluster:6379     redis-cluster-4.redis-cluster:6379     redis-cluster-5.redis-cluster:6379     --cluster-replicas 1 --cluster-yes
+kubectl exec -it redis-cluster-0 -n redis-namespace -- redis-cli --cluster create     redis-cluster-0.redis-service:6379     redis-cluster-1.redis-service:6379     redis-cluster-2.redis-service:6379     redis-cluster-3.redis-service:6379     redis-cluster-4.redis-service:6379     redis-cluster-5.redis-service:6379     --cluster-replicas 1 --cluster-yes
 ```
 
 ## Testando a Conexão
@@ -76,4 +76,29 @@ nslookup redis-service
 ping -c 4 redis-service
 ```
 
-* O hostname `redis-service` refere-se ao nome do serviço que endereça as requisições para o cluster. Esse nome que deve ser chamado de dentro do pod da aplicação e, então, o k8s resolve a conexão.
+* O hostname `redis-service` refere-se ao nome do serviço que endereça as requisições para o cluster. Esse nome que deve ser chamado de dentro do pod da aplicação e, então, o k8s resolve a conexão usando seu DNS interno.
+
+Além disso, também é possível testar a conexão com o python. Primeiro, instale o redis-py usando pip:
+
+```bash
+pip install redis
+python
+```
+
+Em seguida, dentro do Python:
+
+```bash
+import redis
+
+redis_client = redis.StrictRedis(
+    host="redis-cluster",
+    port=6379,
+    password="sua_senha",
+    decode_responses=True
+)
+
+```
+## Removendo o Cluster Redis
+```bash
+kubectl delete namespace redis-namespace
+```
