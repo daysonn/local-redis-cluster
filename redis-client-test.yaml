@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: redis-client
-  namespace: redis-cluster
+  namespace: redis-namespace
 spec:
   containers:
     - name: redis-client
