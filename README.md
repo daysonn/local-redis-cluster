@@ -25,7 +25,7 @@ kubectl get pods -n redis-namespace
 kubectl get svc -n redis-namespace
 ```
 
-## Criando o Cluster Redis
+## Criando o Cluster Redis sem init-redis-cluster.sh
 
 ```bash
 kubectl exec -it redis-cluster-0 -n redis-namespace -- redis-cli --cluster create     redis-cluster-0.redis-service:6379     redis-cluster-1.redis-service:6379     redis-cluster-2.redis-service:6379     redis-cluster-3.redis-service:6379     redis-cluster-4.redis-service:6379     redis-cluster-5.redis-service:6379     --cluster-replicas 1 --cluster-yes
@@ -96,7 +96,6 @@ redis_client = redis.StrictRedis(
     password="sua_senha",
     decode_responses=True
 )
-
 ```
 ## Removendo o Cluster Redis
 ```bash

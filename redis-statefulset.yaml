@@ -17,7 +17,7 @@ spec:
       containers:
         - name: redis
           image: redis:7.0
-          command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--appendonly", "yes"]
+          command: ["/bin/bash", "/usr/local/etc/redis/init-redis-cluster.sh"]
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -29,11 +29,6 @@ spec:
         - name: redis-config
           configMap:
             name: redis-config
-  volumeClaimTemplates:
-    - metadata:
-        name: redis-data
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 1Gi
+            defaultMode: 0755
+        - name: redis-data
+          emptyDir: {}
