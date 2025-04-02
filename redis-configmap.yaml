@@ -129,7 +129,7 @@ data:
                 peer_host="redis-cluster-$i.$REDIS_SERVICE_HOST"
                 echo "➡️  Tentando via $peer_host..."
 
-                OUTPUT=$(redis-cli -a "$REDIS_PASSWORD" -h "$peer_host" get "cluster:nodesconf:$(hostname)" 2>&1 || true)
+                OUTPUT=$(redis-cli -a "$REDIS_PASSWORD" -h "$peer_host" get "cluster:nodesconf:$(hostname)" 2>&1 | grep -v "Using a password with" || true)
                 echo "📄 Resposta de $peer_host:"
                 echo "$OUTPUT"
 
@@ -138,7 +138,7 @@ data:
                     REDIRECT_IP=$(echo "$REDIRECT_ADDR" | cut -d: -f1)
                     echo "🔁 Redirecionado para $REDIRECT_IP, tentando novamente..."
                     sleep 1
-                    OUTPUT=$(redis-cli -a "$REDIS_PASSWORD" -h "$REDIRECT_IP" get "cluster:nodesconf:$(hostname)" 2>&1 || true)
+                    OUTPUT=$(redis-cli -a "$REDIS_PASSWORD" -h "$REDIRECT_IP" get "cluster:nodesconf:$(hostname)" 2>&1 | grep -v "Using a password with" || true)
                     echo "📄 Resposta de $REDIRECT_IP:"
                     echo "$OUTPUT"
                 fi
@@ -166,7 +166,7 @@ data:
             echo "📝 Conteúdo a ser salvo:" && cat /data/nodes.conf
 
             ENCODED_CONF=$(base64 /data/nodes.conf)
-            SAVE_RESULT=$(echo "$ENCODED_CONF" | redis-cli -a "$REDIS_PASSWORD" -x set "cluster:nodesconf:$(hostname)" 2>&1)
+            SAVE_RESULT=$(echo "$ENCODED_CONF" | redis-cli -a "$REDIS_PASSWORD" -x set "cluster:nodesconf:$(hostname)" 2>&1 | grep -v "Using a password with")
             
             echo "📤 Resultado do salvamento (redis-cli):"
             echo "$SAVE_RESULT"
@@ -180,7 +180,7 @@ data:
                 SAVE_RESULT=$(redis-cli -a "$REDIS_PASSWORD" -h "$REDIRECT_IP" -x set "cluster:nodesconf:$(hostname)" < /data/nodes.conf 2>&1)
                 echo "📤 Resultado do salvamento no IP redirecionado:" && echo "$SAVE_RESULT"
                 echo "🔍 Verificando valor salvo..."
-                GET_RESULT=$(redis-cli -a "$REDIS_PASSWORD" -h "$REDIRECT_IP" get "cluster:nodesconf:$(hostname)" 2>&1)
+                GET_RESULT=$(redis-cli -a "$REDIS_PASSWORD" -h "$REDIRECT_IP" get "cluster:nodesconf:$(hostname)" 2>&1 | grep -v "Using a password with")
                 
             else
                 echo "🔍 Verificando valor salvo..."
@@ -217,7 +217,8 @@ data:
 
         # Se nodes.conf foi restaurado corretamente, sobe direto o Redis
         if [ -s /data/nodes.conf ]; then
-            echo "nodes.conf já existe. Subindo Redis normalmente..."
+            echo "nodes.conf já existe. Subindo Redis em foreground..."
+            redis-cli -a "$REDIS_PASSWORD" shutdown
             exec redis-server $TEMP_CONFIG
         fi
 

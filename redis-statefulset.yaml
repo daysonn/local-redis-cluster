@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:7.0
+          image: redis:7.2.5
           command: ["/bin/bash", "/usr/local/etc/redis/init-redis-cluster.sh"]
           ports:
             - containerPort: 6379
