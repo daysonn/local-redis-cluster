@@ -166,7 +166,7 @@ data:
             echo "📝 Conteúdo a ser salvo:" && cat /data/nodes.conf
 
             ENCODED_CONF=$(base64 /data/nodes.conf)
-            SAVE_RESULT=$(echo "$ENCODED_CONF" | redis-cli -a "$REDIS_PASSWORD" -x set "cluster:nodesconf:$(hostname)" 2>&1 | grep -v "Using a password with")
+            SAVE_RESULT=$(redis-cli -a "$REDIS_PASSWORD" -x set "cluster:nodesconf:$(hostname)" < /data/nodes.conf 2>&1 | grep -v "Using a password with")
             
             echo "📤 Resultado do salvamento (redis-cli):"
             echo "$SAVE_RESULT"
