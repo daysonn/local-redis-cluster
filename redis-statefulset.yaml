@@ -17,7 +17,7 @@ spec:
       containers:
         - name: redis
           image: redis:7.2.5
-          command: ["/bin/bash", "/usr/local/etc/redis/init-redis-cluster.sh"]
+          command: ["/bin/bash", "/usr/local/bin/init-cluster.sh"]
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -25,7 +25,14 @@ spec:
               mountPath: /usr/local/etc/redis
             - name: redis-data
               mountPath: /data
+            - name: init-script
+              mountPath: "/usr/local/bin/init-cluster.sh"
+              subPath: init-cluster.sh
       volumes:
+        - name: init-script
+          configMap:
+            name: redis-init-script
+            defaultMode: 0777
         - name: redis-config
           configMap:
             name: redis-config
